@@ -156,6 +156,9 @@ export interface ListResponse {
   single_file_view?: boolean;
   parent?: FileResponse;
   storage_policy?: StoragePolicy;
+  // available_storage_policies is the set of policies the current user's group may
+  // upload to. storage_policy is the default; the uploader offers these as choices.
+  available_storage_policies?: StoragePolicy[];
   view?: ExplorerView;
 }
 

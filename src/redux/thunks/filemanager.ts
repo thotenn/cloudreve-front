@@ -46,6 +46,7 @@ import {
   closeImageViewer,
   resetDialogs,
   selectForUpload,
+  setUploadPolicy,
   setAdvanceSearch,
   setPinFileDialog,
   setSearchPopup,
@@ -530,6 +531,19 @@ export function searchMetadata(
 export function uploadClicked(index: number, type: SelectType): AppThunk {
   return async (dispatch, _getState) => {
     dispatch(closeContextMenu({ index, value: undefined }));
+    // No explicit policy chosen: upload to the group's default policy.
+    dispatch(setUploadPolicy(undefined));
+    dispatch(selectForUpload({ type }));
+  };
+}
+
+// uploadClickedWithPolicy triggers an upload targeting a specific storage policy
+// (identified by its hashid). Used by the "upload to policy" submenu when the group
+// has more than one available storage policy.
+export function uploadClickedWithPolicy(index: number, type: SelectType, policyId: string): AppThunk {
+  return async (dispatch, _getState) => {
+    dispatch(closeContextMenu({ index, value: undefined }));
+    dispatch(setUploadPolicy(policyId));
     dispatch(selectForUpload({ type }));
   };
 }

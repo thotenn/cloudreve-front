@@ -40,7 +40,22 @@ const Uploader = () => {
   const taskListOpen = useAppSelector((state) => state.globalState.uploadTaskListOpen);
   const parent = useAppSelector((state) => state.fileManager[FileManagerIndex.main].list?.parent);
   const path = useAppSelector((state) => state.fileManager[FileManagerIndex.main].pure_path);
-  const policy = useAppSelector((state) => state.fileManager[FileManagerIndex.main].list?.storage_policy);
+  const defaultPolicy = useAppSelector((state) => state.fileManager[FileManagerIndex.main].list?.storage_policy);
+  const availablePolicies = useAppSelector(
+    (state) => state.fileManager[FileManagerIndex.main].list?.available_storage_policies,
+  );
+  const uploadPolicyId = useAppSelector((state) => state.globalState.uploadPolicyId);
+  // Resolve the effective upload policy: the user-picked one when it is part of the
+  // group's available set, otherwise the folder's default policy.
+  const policy = useMemo(() => {
+    if (uploadPolicyId && availablePolicies) {
+      const chosen = availablePolicies.find((p) => p.id === uploadPolicyId);
+      if (chosen) {
+        return chosen;
+      }
+    }
+    return defaultPolicy;
+  }, [defaultPolicy, availablePolicies, uploadPolicyId]);
   const selectFileSignal = useAppSelector((state) => state.globalState.uploadFileSignal);
   const selectFolderSignal = useAppSelector((state) => state.globalState.uploadFolderSignal);
   const uploadRawPromiseId = useAppSelector((state) => state.globalState.uploadRawPromiseId);

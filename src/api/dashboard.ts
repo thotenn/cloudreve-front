@@ -47,6 +47,9 @@ export interface GroupEnt extends CommonMixin {
   permissions?: string;
   edges: {
     storage_policies?: StoragePolicy;
+    // storage_policies_allowed is the set of storage policies members of this group
+    // may upload to. storage_policies above is the default one.
+    storage_policies_allowed?: StoragePolicy[];
   };
   total_users?: number;
   settings?: GroupSetting;

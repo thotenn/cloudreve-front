@@ -53,6 +53,7 @@ import NewFileTemplateMenuItems from "./NewFileTemplateMenuItems.tsx";
 import OpenWithMenuItems from "./OpenWithMenuItems.tsx";
 import OrganizeMenuItems from "./OrganizeMenuItems.tsx";
 import TagMenuItems from "./TagMenuItems.tsx";
+import UploadToPolicyMenuItems from "./UploadToPolicyMenuItems.tsx";
 import useActionDisplayOpt from "./useActionDisplayOpt.ts";
 
 export const SquareMenu = styled(Menu)(() => ({
@@ -101,6 +102,8 @@ const ContextMenu = ({ fmIndex = 0 }: ContextMenuProps) => {
   }, [targetOverwrite, selected]);
 
   const parent = useAppSelector((state) => state.fileManager[fmIndex].list?.parent);
+  const availablePolicies = useAppSelector((state) => state.fileManager[fmIndex].list?.available_storage_policies);
+  const multiPolicy = (availablePolicies?.length ?? 0) > 1;
 
   const displayOpt = useActionDisplayOpt(targets, contextMenuType, parent, fmIndex);
   const onClose = useCallback(() => {
@@ -137,14 +140,23 @@ const ContextMenu = ({ fmIndex = 0 }: ContextMenuProps) => {
 
   const part1Elements = part1 ? (
     <>
-      {displayOpt.showUpload && (
-        <SquareMenuItem onClick={() => dispatch(uploadClicked(0, SelectType.File))}>
-          <ListItemIcon>
-            <Upload fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>{t("application:fileManager.uploadFiles")}</ListItemText>
-        </SquareMenuItem>
-      )}
+      {displayOpt.showUpload &&
+        (multiPolicy ? (
+          <CascadingSubmenu
+            popupId={"uploadFilesToPolicy"}
+            title={t("application:fileManager.uploadFiles")}
+            icon={<Upload fontSize="small" />}
+          >
+            <UploadToPolicyMenuItems fmIndex={fmIndex} type={SelectType.File} />
+          </CascadingSubmenu>
+        ) : (
+          <SquareMenuItem onClick={() => dispatch(uploadClicked(0, SelectType.File))}>
+            <ListItemIcon>
+              <Upload fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>{t("application:fileManager.uploadFiles")}</ListItemText>
+          </SquareMenuItem>
+        ))}
       {displayOpt.showEnter && (
         <SquareMenuItem onClick={() => dispatch(enterFolder(0, targets[0]))}>
           <ListItemIcon>
@@ -153,14 +165,23 @@ const ContextMenu = ({ fmIndex = 0 }: ContextMenuProps) => {
           <ListItemText>{t("application:fileManager.enter")}</ListItemText>
         </SquareMenuItem>
       )}
-      {displayOpt.showUpload && (
-        <SquareMenuItem onClick={() => dispatch(uploadClicked(0, SelectType.Directory))}>
-          <ListItemIcon>
-            <FolderArrowUp fontSize="small" />
-          </ListItemIcon>
-          <ListItemText>{t("application:fileManager.uploadFolder")}</ListItemText>
-        </SquareMenuItem>
-      )}
+      {displayOpt.showUpload &&
+        (multiPolicy ? (
+          <CascadingSubmenu
+            popupId={"uploadFolderToPolicy"}
+            title={t("application:fileManager.uploadFolder")}
+            icon={<FolderArrowUp fontSize="small" />}
+          >
+            <UploadToPolicyMenuItems fmIndex={fmIndex} type={SelectType.Directory} />
+          </CascadingSubmenu>
+        ) : (
+          <SquareMenuItem onClick={() => dispatch(uploadClicked(0, SelectType.Directory))}>
+            <ListItemIcon>
+              <FolderArrowUp fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>{t("application:fileManager.uploadFolder")}</ListItemText>
+          </SquareMenuItem>
+        ))}
       {displayOpt.showUpload && (
         <SquareMenuItem onClick={() => dispatch(uploadFromClipboard(0))}>
           <ListItemIcon>

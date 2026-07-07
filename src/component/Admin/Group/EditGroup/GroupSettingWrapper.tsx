@@ -33,12 +33,18 @@ export const GroupSettingContext = createContext<GroupSettingContextProps>({
 });
 
 const groupValueFilter = (group: GroupEnt): GroupEnt => {
+  const defaultId = group.edges.storage_policies?.id ?? 0;
+  let allowed = (group.edges.storage_policies_allowed ?? []).map((p) => ({ id: p.id }) as StoragePolicy);
+  // Legacy single-policy groups may have a default but an empty allowed set: seed it
+  // from the default so the multi-select reflects the effective allowed policies.
+  if (allowed.length === 0 && defaultId > 0) {
+    allowed = [{ id: defaultId } as StoragePolicy];
+  }
   return {
     ...group,
     edges: {
-      storage_policies: {
-        id: group.edges.storage_policies?.id ?? 0,
-      } as StoragePolicy,
+      storage_policies: { id: defaultId } as StoragePolicy,
+      storage_policies_allowed: allowed,
     },
   };
 };

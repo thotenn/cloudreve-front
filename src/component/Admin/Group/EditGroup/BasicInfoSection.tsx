@@ -7,7 +7,7 @@ import Boolset from "../../../../util/boolset";
 import SizeInput from "../../../Common/SizeInput";
 import { DenseFilledTextField } from "../../../Common/StyledComponents";
 import InPrivate from "../../../Icons/InPrivate";
-import SettingForm, { ProChip } from "../../../Pages/Setting/SettingForm";
+import SettingForm from "../../../Pages/Setting/SettingForm";
 import { NoMarginHelperText, SettingSection, SettingSectionContent } from "../../Settings/Settings";
 import { AnonymousGroupID } from "../GroupRow";
 import { GroupSettingContext } from "./GroupSettingWrapper";
@@ -27,11 +27,38 @@ const BasicInfoSection = () => {
     [setGroup],
   );
 
-  const onPolicyChange = useCallback(
-    (value: number) => {
+  const allowedPolicyIds = useMemo(
+    () => (values.edges.storage_policies_allowed ?? []).map((p) => p.id),
+    [values.edges.storage_policies_allowed],
+  );
+  const defaultPolicyId = values.edges.storage_policies?.id ?? 0;
+
+  const onAvailablePoliciesChange = useCallback(
+    (value: number | number[]) => {
+      const ids = value as number[];
+      setGroup((p: GroupEnt) => {
+        const currentDefault = p.edges.storage_policies?.id ?? 0;
+        // Keep the default within the allowed set: fall back to the first selected
+        // policy when the current default is no longer part of it.
+        const nextDefault = ids.includes(currentDefault) ? currentDefault : (ids[0] ?? 0);
+        return {
+          ...p,
+          edges: {
+            ...p.edges,
+            storage_policies_allowed: ids.map((id) => ({ id }) as StoragePolicy),
+            storage_policies: { id: nextDefault } as StoragePolicy,
+          },
+        };
+      });
+    },
+    [setGroup],
+  );
+
+  const onDefaultPolicyChange = useCallback(
+    (value: number | number[]) => {
       setGroup((p: GroupEnt) => ({
         ...p,
-        edges: { ...p.edges, storage_policies: { id: value } as StoragePolicy },
+        edges: { ...p.edges, storage_policies: { id: value as number } as StoragePolicy },
       }));
     },
     [setGroup],
@@ -79,12 +106,19 @@ const BasicInfoSection = () => {
         {values?.id != AnonymousGroupID && (
           <>
             <SettingForm title={t("group.availablePolicies")} lgWidth={5}>
-              <PolicySelectionInput value={values.edges.storage_policies?.id ?? 0} onChange={onPolicyChange} />
+              <PolicySelectionInput multiple value={allowedPolicyIds} onChange={onAvailablePoliciesChange} />
               <NoMarginHelperText>{t("group.availablePoliciesDes")}</NoMarginHelperText>
-              <NoMarginHelperText>
-                <ProChip size="small" label="Pro" sx={{ ml: 0 }} /> {t("group.availablePolicyDesPro")}
-              </NoMarginHelperText>
             </SettingForm>
+            {allowedPolicyIds.length > 1 && (
+              <SettingForm title={t("group.defaultPolicy")} lgWidth={5}>
+                <PolicySelectionInput
+                  value={defaultPolicyId}
+                  onChange={onDefaultPolicyChange}
+                  restrictToIds={allowedPolicyIds}
+                />
+                <NoMarginHelperText>{t("group.defaultPolicyDes")}</NoMarginHelperText>
+              </SettingForm>
+            )}
             <SettingForm title={t("group.initialStorageQuota")} lgWidth={5}>
               <FormControl fullWidth>
                 <SizeInput

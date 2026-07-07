@@ -255,6 +255,9 @@ export interface GlobalStateSlice {
   // Uploader
   uploadFileSignal?: number;
   uploadFolderSignal?: number;
+  // uploadPolicyId is the hashid of the storage policy chosen for the next upload
+  // batch. Undefined means "use the current folder's default policy".
+  uploadPolicyId?: string;
   uploadProgress?: UploadProgressTotal;
   uploadTaskCount?: number;
   uploadTaskListOpen?: boolean;
@@ -543,6 +546,9 @@ export const globalStateSlice = createSlice({
       } else {
         state.uploadFolderSignal = (state.uploadFolderSignal ?? 0) + 1;
       }
+    },
+    setUploadPolicy(state, action: PayloadAction<string | undefined>) {
+      state.uploadPolicyId = action.payload;
     },
     setCreateNewDialog: (
       state,
@@ -934,6 +940,7 @@ export const {
   closeSaveAsDialog,
   resetDialogs,
   setPolicyOptionCache,
+  setUploadPolicy,
   setSearchPopup,
   setExcalidrawViewer,
   closeExcalidrawViewer,
