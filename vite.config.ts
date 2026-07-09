@@ -77,12 +77,10 @@ export default defineConfig({
             ],
             monaco: ["monaco-editor"],
             codemirror: ["@codemirror"],
-            excalidraw: [
-              "node_modules/@excalidraw",
-              "node_modules/browser-fs-access",
-              "node_modules/image-blob-reduce",
-              "node_modules/pica/",
-            ],
+            // NOTE (fork): the `excalidraw` manual chunk is intentionally removed. Splitting
+            // @excalidraw into its own chunk produces a cross-chunk circular init with React's
+            // jsx-runtime ("Cannot read properties of undefined (reading 'jsxs')" + TDZ), which
+            // hangs the app on the loading screen. Letting Rollup auto-place excalidraw fixes it.
             mermaid: ["node_modules/mermaid", "node_modules/katex"],
             leaflet: ["node_modules/leaflet", "node_modules/react-leaflet"],
             react: ["node_modules/react", "node_modules/react-dom"],
