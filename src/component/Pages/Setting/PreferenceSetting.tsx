@@ -183,6 +183,15 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
     SessionManager.set(UserSettings.TreeViewAutoExpand, e.target.checked);
   };
 
+  const onAutoCompressImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const enabled = e.target.checked;
+    setSetting({ ...setting, auto_compress_images: enabled });
+    setLoading(true);
+    dispatch(sendUpdateUserSetting({ auto_compress_images: enabled }))
+      .then(() => setLoading(false))
+      .finally(() => setLoading(false));
+  };
+
   const onFolderClickActionChange = (_e: React.MouseEvent<HTMLElement>, value: string | null) => {
     if (value) {
       setFolderClickAction(value);
@@ -345,6 +354,20 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
           </ToggleButton>
         </ToggleButtonGroup>
         <FormHelperText>{t("setting.syncViewDes")}</FormHelperText>
+      </SettingForm>
+      <SettingForm title={t("setting.autoCompressImages")} lgWidth={12}>
+        <SmallFormControlLabel
+          control={
+            <Checkbox
+              size="small"
+              checked={!!setting.auto_compress_images}
+              disabled={loading}
+              onChange={onAutoCompressImagesChange}
+            />
+          }
+          label={t("setting.autoCompressImagesLabel")}
+        />
+        <FormHelperText>{t("setting.autoCompressImagesDes")}</FormHelperText>
       </SettingForm>
       <SettingForm title={t("setting.treeView")} lgWidth={12}>
         <SmallFormControlLabel

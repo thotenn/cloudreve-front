@@ -270,6 +270,16 @@ const Settings = () => {
                     "media_meta_ffprobe_size_remote",
                     "media_meta_geocoding",
                     "media_meta_geocoding_mapbox_ak",
+                    "media_compress_image_enabled",
+                    "media_compress_engine",
+                    "media_compress_worker_num",
+                    "media_compress_batch_size",
+                    "media_compress_image_quality",
+                    "media_compress_image_format",
+                    "media_compress_image_args",
+                    "media_compress_result_mode",
+                    "media_compress_min_size",
+                    "cron_media_process",
                   ]}
                 >
                   <Media />

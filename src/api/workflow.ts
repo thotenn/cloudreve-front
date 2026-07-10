@@ -133,6 +133,7 @@ export enum TaskType {
   explicit_entity_recycle = "explicit_entity_recycle",
   upload_sentinel_check = "upload_sentinel_check",
   import = "import",
+  media_compress = "media_compress",
   full_text_index = "full_text_index",
   full_text_copy = "full_text_copy",
   full_text_change_owner = "full_text_change_owner",
