@@ -203,6 +203,7 @@
     "mediaCompressDes": "Compress uploaded images on a schedule to save storage. Users opt in per account; processing runs in the background on the dedicated media queue.",
     "mediaCompressImageEnabled": "Enable image compression",
     "mediaCompressImageEnabledDes": "Master switch. When off, no images are queued or processed regardless of per-user opt-in.",
+    "mediaCompressRetentionNote": "Compressed results are saved as a new file version. Users have version retention enabled by default, which keeps the original — so storage is not reduced until those versions are pruned. Immediate savings require the user to disable version retention in their preferences.",
     "mediaCompressEngine": "Compression engine",
     "mediaCompressEngineDes": "Engine used to re-encode images. vips is recommended for stills; ffmpeg is also available.",
     "mediaCompressFormat": "Output format",

@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import {
+  Alert,
   Box,
   Checkbox,
   Chip,
@@ -368,6 +369,11 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
           label={t("setting.autoCompressImagesLabel")}
         />
         <FormHelperText>{t("setting.autoCompressImagesDes")}</FormHelperText>
+        <Collapse in={!!setting.auto_compress_images && !!versionRetentionEnabled} unmountOnExit>
+          <Alert severity="info" sx={{ mt: 1 }}>
+            {t("setting.autoCompressImagesRetentionWarning")}
+          </Alert>
+        </Collapse>
       </SettingForm>
       <SettingForm title={t("setting.treeView")} lgWidth={12}>
         <SmallFormControlLabel

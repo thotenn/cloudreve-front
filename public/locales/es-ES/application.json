@@ -847,6 +847,7 @@
     "autoCompressImages": "Comprimir imágenes automáticamente",
     "autoCompressImagesLabel": "Comprimir automáticamente las imágenes subidas",
     "autoCompressImagesDes": "Cuando está activado, las imágenes que subas se encolan para compresión diferida en el servidor y así ahorrar almacenamiento. El procesamiento ocurre en segundo plano y no afecta la subida.",
+    "autoCompressImagesRetentionWarning": "Tenés activada la retención de versiones, así que la imagen original (sin comprimir) se conserva como versión anterior — la compresión no liberará espacio hasta que esas versiones se poden. Para ahorrar almacenamiento de verdad, desactivá la retención de versiones más abajo.",
     "folderClickAction": "Acción al hacer clic en carpeta",
     "folderClickActionDes": "Selecciona el comportamiento al hacer clic en una carpeta. \"Abrir\" entrará en la carpeta, \"Seleccionar\" seleccionará la carpeta (doble clic para abrir).",
     "folderClickOpen": "Abrir",

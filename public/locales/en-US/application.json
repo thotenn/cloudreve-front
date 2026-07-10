@@ -794,6 +794,7 @@
     "autoCompressImages": "Auto-compress images",
     "autoCompressImagesLabel": "Automatically compress uploaded images",
     "autoCompressImagesDes": "When enabled, images you upload are queued for deferred compression by the server to save storage. Processing happens in the background and does not affect the upload.",
+    "autoCompressImagesRetentionWarning": "You have version retention enabled, so the original (uncompressed) image is kept as a previous version — compression will not free up space until those versions are pruned. To actually save storage, turn off version retention below.",
     "folderClickAction": "Folder click action",
     "folderClickActionDes": "Choose what happens when you click a folder. \"Open\" navigates into the folder, \"Select\" selects it (double-click to open).",
     "folderClickOpen": "Open",

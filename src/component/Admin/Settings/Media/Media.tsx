@@ -204,6 +204,13 @@ const Media = () => {
               </FormControl>
             </SettingForm>
             <Collapse in={isTrueVal(values.media_compress_image_enabled)} unmountOnExit>
+              <SettingForm lgWidth={9}>
+                <Alert severity="warning" sx={{ mb: 1 }}>
+                  {t("settings.mediaCompressRetentionNote")}
+                </Alert>
+              </SettingForm>
+            </Collapse>
+            <Collapse in={isTrueVal(values.media_compress_image_enabled)} unmountOnExit>
               <Stack spacing={2}>
                 <SettingForm title={t("settings.mediaCompressEngine")} lgWidth={5}>
                   <FormControl>

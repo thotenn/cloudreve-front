@@ -204,6 +204,7 @@
     "mediaCompressDes": "Comprime las imágenes subidas de forma programada para ahorrar almacenamiento. Cada usuario lo activa en su cuenta; el procesamiento corre en segundo plano en la cola de medios dedicada.",
     "mediaCompressImageEnabled": "Habilitar compresión de imágenes",
     "mediaCompressImageEnabledDes": "Interruptor maestro. Si está apagado, no se encola ni procesa ninguna imagen, sin importar la opción por usuario.",
+    "mediaCompressRetentionNote": "El resultado comprimido se guarda como una nueva versión del archivo. Los usuarios tienen la retención de versiones activada por defecto, lo que conserva el original — así que el almacenamiento no baja hasta que esas versiones se poden. Para ahorro inmediato, el usuario debe desactivar la retención de versiones en sus preferencias.",
     "mediaCompressEngine": "Motor de compresión",
     "mediaCompressEngineDes": "Motor usado para re-codificar imágenes. Se recomienda vips para imágenes fijas; ffmpeg también está disponible.",
     "mediaCompressFormat": "Formato de salida",

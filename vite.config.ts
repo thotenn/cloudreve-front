@@ -61,6 +61,13 @@ export default defineConfig({
   define: {
     __ASSETS_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
+  optimizeDeps: {
+    // Restrict the dependency scanner to the SPA entry. Without this, Vite also crawls
+    // public/pdfviewer.html, whose <script src="assets/pdfjs/pdf.mjs"> points at a file
+    // vite-plugin-static-copy only serves in-memory during dev (never written to disk),
+    // which makes the pre-bundling scan fail at startup ("could not be resolved").
+    entries: ["index.html"],
+  },
   build: {
     outDir: "build", // keep same as v3 with minimal changes
     rollupOptions: {
