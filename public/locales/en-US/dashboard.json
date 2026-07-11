@@ -1553,6 +1553,7 @@
     "upload_sentinel_check": "Upload sentinel check",
     "import": "External import",
     "media_compress": "Media compression",
+    "media_backfill": "Compress existing images",
     "full_text_index": "Full-text index",
     "full_text_copy": "Full-text index copy",
     "full_text_change_owner": "Full-text index owner change",

@@ -17,14 +17,16 @@ import {
   useTheme,
 } from "@mui/material";
 import i18next from "i18next";
+import { useSnackbar } from "notistack";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { sendUpdateUserSetting } from "../../../api/api.ts";
+import { sendMediaBackfill, sendUpdateUserSetting } from "../../../api/api.ts";
 import { UserSettings as UserSettingsType } from "../../../api/user.ts";
 import { languages } from "../../../i18n.ts";
 import { setPreferredTheme } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { clearLocalCustomView } from "../../../redux/thunks/filemanager.ts";
+import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { selectLanguage } from "../../../redux/thunks/settings.ts";
 import SessionManager, { UserSettings } from "../../../session";
 import { refreshTimeZone, timeZone } from "../../../util/datetime.ts";
@@ -36,6 +38,7 @@ import {
 } from "../../Common/StyledComponents.tsx";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import { ColorCircle, SelectorBox } from "../../FileManager/FileInfo/ColorCircle/CircleColorSelector.tsx";
+import { DefaultCloseAction } from "../../Common/Snackbar/snackbar.tsx";
 import { SwitchPopover } from "../../Frame/NavBar/DarkThemeSwitcher.tsx";
 import CheckboxChecked from "../../Icons/CheckboxChecked.tsx";
 import FolderArrowRightOutlined from "../../Icons/FolderArrowRightOutlined.tsx";
@@ -68,6 +71,7 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { themes } = useAppSelector((s) => s.siteConfig.basic.config);
 
@@ -80,6 +84,7 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
   const [versionRetentionMax, setVersionRetentionMax] = useState(setting.version_retention_max);
   const [versionRetentionExts, setVersionRetentionExts] = useState<string[] | undefined>(setting.version_retention_ext);
   const [showSaveButton, setShowSaveButton] = useState(false);
+  const [backfillLoading, setBackfillLoading] = useState(false);
   const [autoExpandTreeView, setAutoExpandTreeView] = useState(
     SessionManager.getWithFallback(UserSettings.TreeViewAutoExpand),
   );
@@ -374,6 +379,31 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
             {t("setting.autoCompressImagesRetentionWarning")}
           </Alert>
         </Collapse>
+        <Box sx={{ mt: 1.5 }}>
+          <LoadingButton
+            loading={backfillLoading}
+            variant="outlined"
+            startIcon={<RectangleLandscapeSync />}
+            onClick={() => {
+              dispatch(confirmOperation(t("setting.autoCompressBackfillConfirm"))).then(() => {
+                setBackfillLoading(true);
+                dispatch(sendMediaBackfill({}))
+                  .then(() => {
+                    enqueueSnackbar(t("setting.autoCompressBackfillSubmitted"), {
+                      variant: "success",
+                      action: DefaultCloseAction,
+                    });
+                  })
+                  .finally(() => {
+                    setBackfillLoading(false);
+                  });
+              });
+            }}
+          >
+            {t("setting.autoCompressBackfill")}
+          </LoadingButton>
+          <FormHelperText>{t("setting.autoCompressBackfillDes")}</FormHelperText>
+        </Box>
       </SettingForm>
       <SettingForm title={t("setting.treeView")} lgWidth={12}>
         <SmallFormControlLabel

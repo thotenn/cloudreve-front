@@ -1549,6 +1549,7 @@
     "upload_sentinel_check": "Verificación de centinela de subida",
     "import": "Importación externa",
     "media_compress": "Compresión de medios",
+    "media_backfill": "Comprimir imágenes existentes",
     "full_text_index": "Índice de texto completo",
     "full_text_copy": "Copia de índice de texto completo",
     "full_text_change_owner": "Cambio de propietario de índice de texto completo",

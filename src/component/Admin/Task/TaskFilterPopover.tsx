@@ -131,6 +131,7 @@ const TaskFilterPopover = ({
               TaskType.upload_sentinel_check,
               TaskType.import,
               TaskType.full_text_rebuild,
+              TaskType.media_backfill,
               TaskType.full_text_index,
               TaskType.full_text_copy,
               TaskType.full_text_change_owner,

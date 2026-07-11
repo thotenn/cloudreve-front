@@ -134,6 +134,7 @@ export enum TaskType {
   upload_sentinel_check = "upload_sentinel_check",
   import = "import",
   media_compress = "media_compress",
+  media_backfill = "media_backfill",
   full_text_index = "full_text_index",
   full_text_copy = "full_text_copy",
   full_text_change_owner = "full_text_change_owner",
@@ -170,5 +171,9 @@ export interface SetDownloadFilesService {
 }
 
 export interface RebuildFTSIndexWorkflowService {
+  filtered_storage_policy?: number[];
+}
+
+export interface MediaBackfillWorkflowService {
   filtered_storage_policy?: number[];
 }

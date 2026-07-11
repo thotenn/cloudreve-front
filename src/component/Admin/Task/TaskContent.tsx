@@ -13,6 +13,7 @@ export const userTaskTypes: string[] = [
   TaskType.remote_download,
   TaskType.import,
   TaskType.full_text_rebuild,
+  TaskType.media_backfill,
 ];
 
 export interface TaskContentProps {
