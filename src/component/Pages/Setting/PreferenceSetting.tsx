@@ -1,5 +1,6 @@
 import { LoadingButton } from "@mui/lab";
 import {
+  Alert,
   Box,
   Checkbox,
   Chip,
@@ -16,14 +17,16 @@ import {
   useTheme,
 } from "@mui/material";
 import i18next from "i18next";
+import { useSnackbar } from "notistack";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { sendUpdateUserSetting } from "../../../api/api.ts";
+import { sendMediaBackfill, sendUpdateUserSetting } from "../../../api/api.ts";
 import { UserSettings as UserSettingsType } from "../../../api/user.ts";
 import { languages } from "../../../i18n.ts";
 import { setPreferredTheme } from "../../../redux/globalStateSlice.ts";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks.ts";
 import { clearLocalCustomView } from "../../../redux/thunks/filemanager.ts";
+import { confirmOperation } from "../../../redux/thunks/dialog.ts";
 import { selectLanguage } from "../../../redux/thunks/settings.ts";
 import SessionManager, { UserSettings } from "../../../session";
 import { refreshTimeZone, timeZone } from "../../../util/datetime.ts";
@@ -35,6 +38,7 @@ import {
 } from "../../Common/StyledComponents.tsx";
 import { SquareMenuItem } from "../../FileManager/ContextMenu/ContextMenu.tsx";
 import { ColorCircle, SelectorBox } from "../../FileManager/FileInfo/ColorCircle/CircleColorSelector.tsx";
+import { DefaultCloseAction } from "../../Common/Snackbar/snackbar.tsx";
 import { SwitchPopover } from "../../Frame/NavBar/DarkThemeSwitcher.tsx";
 import CheckboxChecked from "../../Icons/CheckboxChecked.tsx";
 import FolderArrowRightOutlined from "../../Icons/FolderArrowRightOutlined.tsx";
@@ -67,6 +71,7 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { themes } = useAppSelector((s) => s.siteConfig.basic.config);
 
@@ -79,6 +84,7 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
   const [versionRetentionMax, setVersionRetentionMax] = useState(setting.version_retention_max);
   const [versionRetentionExts, setVersionRetentionExts] = useState<string[] | undefined>(setting.version_retention_ext);
   const [showSaveButton, setShowSaveButton] = useState(false);
+  const [backfillLoading, setBackfillLoading] = useState(false);
   const [autoExpandTreeView, setAutoExpandTreeView] = useState(
     SessionManager.getWithFallback(UserSettings.TreeViewAutoExpand),
   );
@@ -181,6 +187,24 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
   const onAutoExpandTreeViewChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAutoExpandTreeView(e.target.checked);
     SessionManager.set(UserSettings.TreeViewAutoExpand, e.target.checked);
+  };
+
+  const onAutoCompressImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const enabled = e.target.checked;
+    setSetting({ ...setting, auto_compress_images: enabled });
+    setLoading(true);
+    dispatch(sendUpdateUserSetting({ auto_compress_images: enabled }))
+      .then(() => setLoading(false))
+      .finally(() => setLoading(false));
+  };
+
+  const onAutoCompressVideosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const enabled = e.target.checked;
+    setSetting({ ...setting, auto_compress_videos: enabled });
+    setLoading(true);
+    dispatch(sendUpdateUserSetting({ auto_compress_videos: enabled }))
+      .then(() => setLoading(false))
+      .finally(() => setLoading(false));
   };
 
   const onFolderClickActionChange = (_e: React.MouseEvent<HTMLElement>, value: string | null) => {
@@ -345,6 +369,69 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
           </ToggleButton>
         </ToggleButtonGroup>
         <FormHelperText>{t("setting.syncViewDes")}</FormHelperText>
+      </SettingForm>
+      <SettingForm title={t("setting.autoCompressImages")} lgWidth={12}>
+        <SmallFormControlLabel
+          control={
+            <Checkbox
+              size="small"
+              checked={!!setting.auto_compress_images}
+              disabled={loading}
+              onChange={onAutoCompressImagesChange}
+            />
+          }
+          label={t("setting.autoCompressImagesLabel")}
+        />
+        <FormHelperText>{t("setting.autoCompressImagesDes")}</FormHelperText>
+        <Collapse in={!!setting.auto_compress_images && !!versionRetentionEnabled} unmountOnExit>
+          <Alert severity="info" sx={{ mt: 1 }}>
+            {t("setting.autoCompressImagesRetentionWarning")}
+          </Alert>
+        </Collapse>
+        <Box sx={{ mt: 1.5 }}>
+          <LoadingButton
+            loading={backfillLoading}
+            variant="outlined"
+            startIcon={<RectangleLandscapeSync />}
+            onClick={() => {
+              dispatch(confirmOperation(t("setting.autoCompressBackfillConfirm"))).then(() => {
+                setBackfillLoading(true);
+                dispatch(sendMediaBackfill({}))
+                  .then(() => {
+                    enqueueSnackbar(t("setting.autoCompressBackfillSubmitted"), {
+                      variant: "success",
+                      action: DefaultCloseAction,
+                    });
+                  })
+                  .finally(() => {
+                    setBackfillLoading(false);
+                  });
+              });
+            }}
+          >
+            {t("setting.autoCompressBackfill")}
+          </LoadingButton>
+          <FormHelperText>{t("setting.autoCompressBackfillDes")}</FormHelperText>
+        </Box>
+      </SettingForm>
+      <SettingForm title={t("setting.autoCompressVideos")} lgWidth={12}>
+        <SmallFormControlLabel
+          control={
+            <Checkbox
+              size="small"
+              checked={!!setting.auto_compress_videos}
+              disabled={loading}
+              onChange={onAutoCompressVideosChange}
+            />
+          }
+          label={t("setting.autoCompressVideosLabel")}
+        />
+        <FormHelperText>{t("setting.autoCompressVideosDes")}</FormHelperText>
+        <Collapse in={!!setting.auto_compress_videos && !!versionRetentionEnabled} unmountOnExit>
+          <Alert severity="warning" sx={{ mt: 1 }}>
+            {t("setting.autoCompressVideosRetentionWarning")}
+          </Alert>
+        </Collapse>
       </SettingForm>
       <SettingForm title={t("setting.treeView")} lgWidth={12}>
         <SmallFormControlLabel

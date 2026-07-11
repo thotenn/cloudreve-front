@@ -106,6 +106,7 @@ import {
   DownloadWorkflowService,
   ImportWorkflowService,
   ListTaskService,
+  MediaBackfillWorkflowService,
   RebuildFTSIndexWorkflowService,
   SetDownloadFilesService,
   TaskListResponse,
@@ -2178,6 +2179,23 @@ export function sendRebuildFTSIndex(req: RebuildFTSIndexWorkflowService): ThunkR
     return await dispatch(
       send(
         "/workflow/rebuildFtsIndex",
+        {
+          data: req,
+          method: "POST",
+        },
+        {
+          ...defaultOpts,
+        },
+      ),
+    );
+  };
+}
+
+export function sendMediaBackfill(req: MediaBackfillWorkflowService): ThunkResponse<TaskResponse> {
+  return async (dispatch, _getState) => {
+    return await dispatch(
+      send(
+        "/workflow/mediaBackfill",
         {
           data: req,
           method: "POST",

@@ -13,6 +13,7 @@ export const userTaskTypes: string[] = [
   TaskType.remote_download,
   TaskType.import,
   TaskType.full_text_rebuild,
+  TaskType.media_backfill,
 ];
 
 export interface TaskContentProps {
@@ -96,6 +97,10 @@ export const TaskContent = memo(({ task, openEntity, openFile }: TaskContentProp
             components={[<Link key={0} href={"#/"} onClick={entityLinkClick(privateState?.entity_id ?? 0)} />]}
           />
         );
+      case TaskType.media_compress:
+        return t("task.mediaCompressContent");
+      case TaskType.media_compress_video:
+        return t("task.mediaCompressVideoContent");
       case TaskType.entity_recycle_routine:
         return t("task.entityRecycleRoutine");
       case TaskType.explicit_entity_recycle:

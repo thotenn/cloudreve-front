@@ -177,6 +177,368 @@ const Media = () => {
         </SettingSection>
         <SettingSection>
           <Typography variant="h6" gutterBottom>
+            {t("settings.mediaCompress")}
+          </Typography>
+          <SettingSectionContent>
+            <SettingForm lgWidth={6}>
+              <Alert severity="info" sx={{ mb: 1 }}>
+                {t("settings.mediaCompressDes")}
+              </Alert>
+            </SettingForm>
+            <SettingForm lgWidth={5}>
+              <FormControl fullWidth>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isTrueVal(values.media_compress_image_enabled)}
+                      onChange={(e) =>
+                        setSettings({
+                          media_compress_image_enabled: e.target.checked ? "1" : "0",
+                        })
+                      }
+                    />
+                  }
+                  label={t("settings.mediaCompressImageEnabled")}
+                />
+                <NoMarginHelperText>{t("settings.mediaCompressImageEnabledDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+            <Collapse in={isTrueVal(values.media_compress_image_enabled)} unmountOnExit>
+              <SettingForm lgWidth={9}>
+                <Alert severity="warning" sx={{ mb: 1 }}>
+                  {t("settings.mediaCompressRetentionNote")}
+                </Alert>
+              </SettingForm>
+            </Collapse>
+            <Collapse in={isTrueVal(values.media_compress_image_enabled)} unmountOnExit>
+              <Stack spacing={2}>
+                <SettingForm title={t("settings.mediaCompressEngine")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_engine ?? "vips"}
+                      onChange={(e) => setSettings({ media_compress_engine: e.target.value as string })}
+                    >
+                      {["vips", "ffmpeg"].map((f) => (
+                        <SquareMenuItem value={f} key={f}>
+                          <ListItemText slotProps={{ primary: { variant: "body2" } }}>{f}</ListItemText>
+                        </SquareMenuItem>
+                      ))}
+                    </DenseSelect>
+                    <NoMarginHelperText>{t("settings.mediaCompressEngineDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressFormat")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_image_format ?? "keep"}
+                      onChange={(e) => setSettings({ media_compress_image_format: e.target.value as string })}
+                    >
+                      {["keep", "jpg", "webp", "png"].map((f) => (
+                        <SquareMenuItem value={f} key={f}>
+                          <ListItemText slotProps={{ primary: { variant: "body2" } }}>{f}</ListItemText>
+                        </SquareMenuItem>
+                      ))}
+                    </DenseSelect>
+                    <NoMarginHelperText>{t("settings.mediaCompressFormatDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressQuality")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 1, max: 100, step: 1 }}
+                      value={values.media_compress_image_quality}
+                      onChange={(e) => setSettings({ media_compress_image_quality: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressQualityDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressResultMode")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_result_mode ?? "version"}
+                      onChange={(e) => setSettings({ media_compress_result_mode: e.target.value as string })}
+                    >
+                      {["version"].map((f) => (
+                        <SquareMenuItem value={f} key={f}>
+                          <ListItemText slotProps={{ primary: { variant: "body2" } }}>{f}</ListItemText>
+                        </SquareMenuItem>
+                      ))}
+                    </DenseSelect>
+                    <NoMarginHelperText>{t("settings.mediaCompressResultModeDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressMinSize")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 0, step: 1 }}
+                      value={values.media_compress_min_size}
+                      onChange={(e) => setSettings({ media_compress_min_size: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressMinSizeDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressBatchSize")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 1, step: 1 }}
+                      value={values.media_compress_batch_size}
+                      onChange={(e) => setSettings({ media_compress_batch_size: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressBatchSizeDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressWorkerNum")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 1, step: 1 }}
+                      value={values.media_compress_worker_num}
+                      onChange={(e) => setSettings({ media_compress_worker_num: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressWorkerNumDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressCron")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      required
+                      value={values.cron_media_process}
+                      onChange={(e) => setSettings({ cron_media_process: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressCronDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressArgs")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      value={values.media_compress_image_args}
+                      onChange={(e) => setSettings({ media_compress_image_args: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressArgsDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+              </Stack>
+            </Collapse>
+          </SettingSectionContent>
+        </SettingSection>
+        <SettingSection>
+          <Typography variant="h6" gutterBottom>
+            {t("settings.mediaCompressVideo")}
+          </Typography>
+          <SettingSectionContent>
+            <SettingForm lgWidth={6}>
+              <Alert severity="info" sx={{ mb: 1 }}>
+                {t("settings.mediaCompressVideoDes")}
+              </Alert>
+            </SettingForm>
+            <SettingForm lgWidth={5}>
+              <FormControl fullWidth>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isTrueVal(values.media_compress_video_enabled)}
+                      onChange={(e) =>
+                        setSettings({
+                          media_compress_video_enabled: e.target.checked ? "1" : "0",
+                        })
+                      }
+                    />
+                  }
+                  label={t("settings.mediaCompressVideoEnabled")}
+                />
+                <NoMarginHelperText>{t("settings.mediaCompressVideoEnabledDes")}</NoMarginHelperText>
+              </FormControl>
+            </SettingForm>
+            <Collapse in={isTrueVal(values.media_compress_video_enabled)} unmountOnExit>
+              <SettingForm lgWidth={9}>
+                <Alert severity="warning" sx={{ mb: 1 }}>
+                  {t("settings.mediaCompressVideoRetentionNote")}
+                </Alert>
+              </SettingForm>
+            </Collapse>
+            <Collapse in={isTrueVal(values.media_compress_video_enabled)} unmountOnExit>
+              <Stack spacing={2}>
+                <SettingForm title={t("settings.mediaCompressVideoCodec")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_video_codec ?? "libx264"}
+                      onChange={(e) => setSettings({ media_compress_video_codec: e.target.value as string })}
+                    >
+                      {["libx264", "libx265", "libvpx-vp9", "libaom-av1"].map((f) => (
+                        <SquareMenuItem value={f} key={f}>
+                          <ListItemText slotProps={{ primary: { variant: "body2" } }}>{f}</ListItemText>
+                        </SquareMenuItem>
+                      ))}
+                    </DenseSelect>
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoCodecDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoCrf")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 0, max: 63, step: 1 }}
+                      value={values.media_compress_video_crf}
+                      onChange={(e) => setSettings({ media_compress_video_crf: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoCrfDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoPreset")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_video_preset ?? "medium"}
+                      onChange={(e) => setSettings({ media_compress_video_preset: e.target.value as string })}
+                    >
+                      {["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow"].map(
+                        (f) => (
+                          <SquareMenuItem value={f} key={f}>
+                            <ListItemText slotProps={{ primary: { variant: "body2" } }}>{f}</ListItemText>
+                          </SquareMenuItem>
+                        ),
+                      )}
+                    </DenseSelect>
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoPresetDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoContainer")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_video_container ?? "keep"}
+                      onChange={(e) => setSettings({ media_compress_video_container: e.target.value as string })}
+                    >
+                      {["keep", "mp4", "webm", "mkv"].map((f) => (
+                        <SquareMenuItem value={f} key={f}>
+                          <ListItemText slotProps={{ primary: { variant: "body2" } }}>{f}</ListItemText>
+                        </SquareMenuItem>
+                      ))}
+                    </DenseSelect>
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoContainerDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoMaxResolution")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      value={values.media_compress_video_max_resolution}
+                      onChange={(e) => setSettings({ media_compress_video_max_resolution: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoMaxResolutionDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoAudioCodec")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      value={values.media_compress_video_audio_codec}
+                      onChange={(e) => setSettings({ media_compress_video_audio_codec: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoAudioCodecDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoAudioBitrate")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      value={values.media_compress_video_audio_bitrate}
+                      onChange={(e) => setSettings({ media_compress_video_audio_bitrate: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoAudioBitrateDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoMinSize")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 0, step: 1 }}
+                      value={values.media_compress_video_min_size}
+                      onChange={(e) => setSettings({ media_compress_video_min_size: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoMinSizeDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoBatchSize")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 1, step: 1 }}
+                      value={values.media_compress_video_batch_size}
+                      onChange={(e) => setSettings({ media_compress_video_batch_size: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoBatchSizeDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoWorkerNum")} lgWidth={5}>
+                  <FormControl>
+                    <DenseFilledTextField
+                      type="number"
+                      required
+                      inputProps={{ min: 1, step: 1 }}
+                      value={values.media_compress_video_worker_num}
+                      onChange={(e) => setSettings({ media_compress_video_worker_num: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoWorkerNumDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoThreads")} lgWidth={5}>
+                  <FormControl>
+                    <DenseSelect
+                      value={values.media_compress_video_threads ?? "1"}
+                      onChange={(e) => setSettings({ media_compress_video_threads: e.target.value as string })}
+                    >
+                      {Array.from({ length: Math.max(1, parseInt(values.cpu_num ?? "1") || 1) }, (_, i) => i + 1).map(
+                        (n) => (
+                          <SquareMenuItem value={String(n)} key={n}>
+                            <ListItemText slotProps={{ primary: { variant: "body2" } }}>{n}</ListItemText>
+                          </SquareMenuItem>
+                        ),
+                      )}
+                    </DenseSelect>
+                    <NoMarginHelperText>
+                      {t("settings.mediaCompressVideoThreadsDes", { cpu: Math.max(1, parseInt(values.cpu_num ?? "1") || 1) })}
+                    </NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm lgWidth={5}>
+                  <FormControl fullWidth>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={isTrueVal(values.media_compress_video_nice)}
+                          onChange={(e) =>
+                            setSettings({
+                              media_compress_video_nice: e.target.checked ? "1" : "0",
+                            })
+                          }
+                        />
+                      }
+                      label={t("settings.mediaCompressVideoNice")}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoNiceDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm title={t("settings.mediaCompressVideoArgs")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      value={values.media_compress_video_args}
+                      onChange={(e) => setSettings({ media_compress_video_args: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressVideoArgsDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+              </Stack>
+            </Collapse>
+          </SettingSectionContent>
+        </SettingSection>
+        <SettingSection>
+          <Typography variant="h6" gutterBottom>
             {t("settings.extractMediaMeta")}
           </Typography>
           <SettingSectionContent>
