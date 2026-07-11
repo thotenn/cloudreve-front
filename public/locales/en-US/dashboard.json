@@ -1571,6 +1571,8 @@
     "explicitEntityRecycle": "Explicitly recycle files Blobs: {{blobs}}",
     "entityRecycleRoutine": "Scan and recycle files Blob",
     "mediaMetadata": "Extract media meta of Blob <0>#{{entityID}}</0>",
+    "mediaCompressContent": "Compress uploaded image",
+    "mediaCompressVideoContent": "Transcode uploaded video",
     "uploadSentinelCheck": "Check status of upload session {{uploadSessionID}}",
     "remoteDownload": "Remote download: ",
     "owner": "Owner",

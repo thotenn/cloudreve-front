@@ -1567,6 +1567,8 @@
     "explicitEntityRecycle": "Reciclar explícitamente Blobs de archivos: {{blobs}}",
     "entityRecycleRoutine": "Escanear y reciclar Blob de archivos",
     "mediaMetadata": "Extraer meta de medios del Blob <0>#{{entityID}}</0>",
+    "mediaCompressContent": "Comprimir imagen subida",
+    "mediaCompressVideoContent": "Transcodificar video subido",
     "uploadSentinelCheck": "Verificar estado de la sesión de subida {{uploadSessionID}}",
     "remoteDownload": "Descarga remota: ",
     "owner": "Propietario",
