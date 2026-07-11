@@ -105,6 +105,7 @@ export interface UserSettings {
   disable_view_sync: boolean;
   share_links_in_profile: ShareLinksInProfileLevel;
   auto_compress_images: boolean;
+  auto_compress_videos: boolean;
   oauth_grants?: OAuthGrant[];
 }
 
@@ -130,6 +131,7 @@ export interface PatchUserSetting {
   disable_view_sync?: boolean;
   share_links_in_profile?: ShareLinksInProfileLevel;
   auto_compress_images?: boolean;
+  auto_compress_videos?: boolean;
 }
 
 export interface PasskeyCredentialOption {

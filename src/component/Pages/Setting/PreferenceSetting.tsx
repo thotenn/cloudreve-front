@@ -198,6 +198,15 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
       .finally(() => setLoading(false));
   };
 
+  const onAutoCompressVideosChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const enabled = e.target.checked;
+    setSetting({ ...setting, auto_compress_videos: enabled });
+    setLoading(true);
+    dispatch(sendUpdateUserSetting({ auto_compress_videos: enabled }))
+      .then(() => setLoading(false))
+      .finally(() => setLoading(false));
+  };
+
   const onFolderClickActionChange = (_e: React.MouseEvent<HTMLElement>, value: string | null) => {
     if (value) {
       setFolderClickAction(value);
@@ -404,6 +413,25 @@ const PreferenceSetting = ({ setting, setSetting }: PreferenceSettingProps) => {
           </LoadingButton>
           <FormHelperText>{t("setting.autoCompressBackfillDes")}</FormHelperText>
         </Box>
+      </SettingForm>
+      <SettingForm title={t("setting.autoCompressVideos")} lgWidth={12}>
+        <SmallFormControlLabel
+          control={
+            <Checkbox
+              size="small"
+              checked={!!setting.auto_compress_videos}
+              disabled={loading}
+              onChange={onAutoCompressVideosChange}
+            />
+          }
+          label={t("setting.autoCompressVideosLabel")}
+        />
+        <FormHelperText>{t("setting.autoCompressVideosDes")}</FormHelperText>
+        <Collapse in={!!setting.auto_compress_videos && !!versionRetentionEnabled} unmountOnExit>
+          <Alert severity="warning" sx={{ mt: 1 }}>
+            {t("setting.autoCompressVideosRetentionWarning")}
+          </Alert>
+        </Collapse>
       </SettingForm>
       <SettingForm title={t("setting.treeView")} lgWidth={12}>
         <SmallFormControlLabel

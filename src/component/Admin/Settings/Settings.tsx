@@ -280,6 +280,21 @@ const Settings = () => {
                     "media_compress_result_mode",
                     "media_compress_min_size",
                     "cron_media_process",
+                    "media_compress_video_enabled",
+                    "media_compress_video_codec",
+                    "media_compress_video_crf",
+                    "media_compress_video_preset",
+                    "media_compress_video_container",
+                    "media_compress_video_max_resolution",
+                    "media_compress_video_audio_codec",
+                    "media_compress_video_audio_bitrate",
+                    "media_compress_video_args",
+                    "media_compress_video_worker_num",
+                    "media_compress_video_batch_size",
+                    "media_compress_video_threads",
+                    "media_compress_video_nice",
+                    "media_compress_video_min_size",
+                    "cpu_num",
                   ]}
                 >
                   <Media />

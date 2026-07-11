@@ -132,6 +132,7 @@ const TaskFilterPopover = ({
               TaskType.import,
               TaskType.full_text_rebuild,
               TaskType.media_backfill,
+              TaskType.media_compress_video,
               TaskType.full_text_index,
               TaskType.full_text_copy,
               TaskType.full_text_change_owner,

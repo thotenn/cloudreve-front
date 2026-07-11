@@ -134,6 +134,7 @@ export enum TaskType {
   upload_sentinel_check = "upload_sentinel_check",
   import = "import",
   media_compress = "media_compress",
+  media_compress_video = "media_compress_video",
   media_backfill = "media_backfill",
   full_text_index = "full_text_index",
   full_text_copy = "full_text_copy",
