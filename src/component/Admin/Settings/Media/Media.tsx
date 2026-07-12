@@ -254,6 +254,46 @@ const Media = () => {
                     <NoMarginHelperText>{t("settings.mediaCompressQualityDes")}</NoMarginHelperText>
                   </FormControl>
                 </SettingForm>
+                <SettingForm title={t("settings.mediaCompressImageMaxResolution")} lgWidth={5}>
+                  <FormControl fullWidth>
+                    <DenseFilledTextField
+                      placeholder="1920x1080"
+                      value={values.media_compress_image_max_resolution ?? ""}
+                      onChange={(e) => setSettings({ media_compress_image_max_resolution: e.target.value })}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressImageMaxResolutionDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <SettingForm lgWidth={5}>
+                  <FormControl fullWidth>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={isTrueVal(values.media_compress_image_png_quantize)}
+                          onChange={(e) =>
+                            setSettings({
+                              media_compress_image_png_quantize: e.target.checked ? "1" : "0",
+                            })
+                          }
+                        />
+                      }
+                      label={t("settings.mediaCompressImagePngQuantize")}
+                    />
+                    <NoMarginHelperText>{t("settings.mediaCompressImagePngQuantizeDes")}</NoMarginHelperText>
+                  </FormControl>
+                </SettingForm>
+                <Collapse in={isTrueVal(values.media_compress_image_png_quantize)} unmountOnExit>
+                  <SettingForm title={t("settings.mediaCompressImagePngQuality")} lgWidth={5}>
+                    <FormControl fullWidth>
+                      <DenseFilledTextField
+                        placeholder="70-90"
+                        value={values.media_compress_image_png_quality ?? ""}
+                        onChange={(e) => setSettings({ media_compress_image_png_quality: e.target.value })}
+                      />
+                      <NoMarginHelperText>{t("settings.mediaCompressImagePngQualityDes")}</NoMarginHelperText>
+                    </FormControl>
+                  </SettingForm>
+                </Collapse>
                 <SettingForm title={t("settings.mediaCompressResultMode")} lgWidth={5}>
                   <FormControl>
                     <DenseSelect
